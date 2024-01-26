@@ -198,7 +198,7 @@ public class LDRAWReader {
 	private static final Pattern COMMENT=Pattern.compile("^//");
 	private static final Pattern COMMAND=Pattern.compile("^(!\\w+\\b|name:|author:|bfc\\b|clear\\b|pause\\b|print\\b|save\\b|step\\b|write\\b)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern AUTHOR_ARGS=Pattern.compile("^([^\\[]+?)?\\s*(?:\\[([^\\]]+)\\])?$");
-	private static final Pattern LDRAW_ORG_ARGS=Pattern.compile("^(part|subpart|primitive|48_primitive|shortcut|configuration)\\s+(\\S.*?\\s+)?(original|update\\s+(\\d+)-(\\d+)(?:-(\\d+))?)$", Pattern.CASE_INSENSITIVE);
+	private static final Pattern LDRAW_ORG_ARGS=Pattern.compile("^(part|subpart|primitive|48_primitive|8_primitive|shortcut|configuration)\\s+(\\S.*?\\s+)?(original|update\\s+(\\d+)-(\\d+)(?:-(\\d+))?)$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern LICENSE_REDISTRIBUTABLE=Pattern.compile("(?!=not)\\s*redistributable", Pattern.CASE_INSENSITIVE);
 	private static final Pattern HISTORY_ARGS=Pattern.compile("^(\\d+-\\d+-\\d+)\\s+(\\[[^\\]]+\\]|\\{[^\\}]+\\})\\s+(.*?)\\s*$", Pattern.CASE_INSENSITIVE);
 	private static final Pattern COLOUR_ARGS=Pattern.compile("^(.*?)\\s+CODE\\s+(\\d+)\\s+VALUE\\s+((?:0[xX]|#)[0-9A-Fa-f]{6})\\s+EDGE\\s+((?:0[xX]|#)[0-9A-Fa-f]{6}|\\d+)(?:\\s+ALPHA\\s+(\\d+))?(?:\\s+LUMINANCE\\s+(\\d+))?(?:\\s+(CHROME|PEARLESCENT|RUBBER|MATTE_METALLIC|METALLIC|METAL|MATERIAL\\s+.*?))?\\s*$");
@@ -222,8 +222,11 @@ public class LDRAWReader {
 				m = require(arguments, LDRAW_ORG_ARGS, "Malformed LDRAW_ORG line: "+arguments);
 				
 				String partTypeName=m.group(1).toLowerCase();
-				if(partTypeName.equals("48_primitive"))
+				if(partTypeName.equals("48_primitive")) {
 					partTypeName = "primitive48";
+                                } else if(partTypeName.equals("8_primitive")) {
+					partTypeName = "primitive8";
+                                }
 				FileType partType=valueOf(FileType.class, partTypeName.toUpperCase());
 
 				String qualifiers=m.group(2);

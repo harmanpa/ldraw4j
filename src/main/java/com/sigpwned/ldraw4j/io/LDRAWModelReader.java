@@ -94,7 +94,7 @@ public class LDRAWModelReader {
 		name = name.replace('\\', File.separatorChar);
 		
 		File result=null;
-		for(File home : new File[]{new File(getConfig().getHome(), "parts"), new File(new File(getConfig().getHome(), "p"), "48"), new File(getConfig().getHome(), "p"), new File(System.getProperty("user.home"), "Temporary")}) {
+		for(File home : new File[]{new File(getConfig().getHome(), "parts"), new File(new File(getConfig().getHome(), "p"), "48"), new File(new File(getConfig().getHome(), "p"), "8"), new File(getConfig().getHome(), "p"), new File(System.getProperty("user.home"), "Temporary")}) {
 		// for(File home : new File[]{new File(getConfig().getHome(), "parts"), new File(getConfig().getHome(), "p")}) {
 			result = new File(home, name);
 			if(result.exists()) {

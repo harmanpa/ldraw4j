@@ -14,7 +14,7 @@
 package com.sigpwned.ldraw4j.model.file;
 
 public enum FileType {
-	PART("Part"), SUBPART("Subpart"), PRIMITIVE("Primitive"), PRIMITIVE48("48_Primitive"), SHORTCUT("Shortcut"), CONFIGURATION("Configuration");
+	PART("Part"), SUBPART("Subpart"), PRIMITIVE("Primitive"), PRIMITIVE48("48_Primitive"), PRIMITIVE8("8_primitive"), SHORTCUT("Shortcut"), CONFIGURATION("Configuration");
 	
 	private String value;
 	
