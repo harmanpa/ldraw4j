@@ -38,14 +38,14 @@ public class LDRAWModelReader {
 		private boolean invertNext;
 		private ModelState modelState;
 		private Colour currentColour;
-		
+
 		public State(String name) {
 			this.modelState = new ModelState(name);
 			this.inverted = false;
 			this.invertNext = false;
 			this.currentColour = Colour.defaultColour();
 		}
-		
+
 		public boolean isInverted() {
 			return inverted;
 		}
@@ -61,7 +61,7 @@ public class LDRAWModelReader {
 		public void setInvertNext(boolean invertNext) {
 			this.invertNext = invertNext;
 		}
-		
+
 		public ModelState getModelState() {
 			return modelState;
 		}
@@ -74,12 +74,12 @@ public class LDRAWModelReader {
 			this.currentColour = currentColour;
 		}
 	}
-	
+
 	private LDRAWConfiguration config;
 	private LDRAWModelReadHandler handler;
 	private BufferedReader lines;
 	private List<State> stateStack;
-	
+
 	public LDRAWModelReader(LDRAWConfiguration config, LDRAWModelReadHandler handler) {
 		this.config = config;
 		this.handler = handler;
@@ -89,25 +89,29 @@ public class LDRAWModelReader {
 	public void read(String name) throws IOException, LDRAWException {
 		read(name, new FileReader(part(name)));
 	}
-	
-	protected File part(String name) {
+
+	protected File part(String name) throws LDRAWException {
 		name = name.replace('\\', File.separatorChar);
-		
-		File result=null;
-		for(File home : new File[]{new File(getConfig().getHome(), "parts"), new File(new File(getConfig().getHome(), "p"), "48"), new File(new File(getConfig().getHome(), "p"), "8"), new File(getConfig().getHome(), "p"), new File(System.getProperty("user.home"), "Temporary")}) {
-		// for(File home : new File[]{new File(getConfig().getHome(), "parts"), new File(getConfig().getHome(), "p")}) {
+
+		File result = null;
+		for (File home : new File[] { new File(getConfig().getHome(), "parts"),
+				new File(new File(getConfig().getHome(), "p"), "48"),
+				new File(new File(getConfig().getHome(), "p"), "8"), new File(getConfig().getHome(), "p"),
+				new File(System.getProperty("user.home"), "Temporary") }) {
+			// for(File home : new File[]{new File(getConfig().getHome(), "parts"), new
+			// File(getConfig().getHome(), "p")}) {
 			result = new File(home, name);
-			if(result.exists()) {
+			if (result.exists()) {
 				// System.err.println(result.getAbsolutePath());
 				break;
 			}
 		}
-		if(result == null)
-			throw new RuntimeException("Should never happen");
-		
+		if (result == null) {
+			throw new LDRAWException("Part file not found for " + name);
+		}
 		return result;
 	}
-	
+
 	public void read(String name, Reader in) throws IOException, LDRAWException {
 		try {
 			try {
@@ -115,198 +119,189 @@ public class LDRAWModelReader {
 				push(new State(name));
 				try {
 					parse(in);
-				}
-				finally {
+				} finally {
 					pop();
 				}
-			}
-			finally {
+			} finally {
 				lines.close();
 				lines = null;
 			}
-		}
-		finally {
+		} finally {
 			in.close();
 		}
 	}
-	
+
 	protected LDRAWConfiguration getConfig() {
 		return config;
 	}
-	
+
 	protected State top() {
-		if(stateStack.size() == 0)
+		if (stateStack.size() == 0)
 			throw new IllegalStateException("State stack empty");
-		return stateStack.get(stateStack.size()-1);
+		return stateStack.get(stateStack.size() - 1);
 	}
-	
+
 	protected State pop() {
-		State result=top();
-		stateStack.remove(stateStack.size()-1);
+		State result = top();
+		stateStack.remove(stateStack.size() - 1);
 		return result;
 	}
-	
+
 	protected void push(State state) {
 		stateStack.add(state);
 	}
-	
+
 	protected Colour eval(ColourReference colour) {
 		return colour.eval(getConfig().getColours(), top().getCurrentColour());
 	}
-	
-	private int depth=0;
+
+	private int depth = 0;
+
 	protected void parse(Reader in) throws IOException, LDRAWException {
 		handler.enterFile(top().getModelState().getName());
 		try {
 			new LDRAWReader(new AbstractLDRAWReadHandler() {
 				public void bfc(BFC bfc) throws LDRAWException {
-					if(top().isInvertNext())
+					if (top().isInvertNext()) {
 						System.err.println("WARNING: Ignoring illegal INVERTNEXT");
-					
-					top().setInvertNext(false);
-					
-					if(bfc == BFC.NOCERTIFY)
-						top().getModelState().setWinding(winding(Winding.UNKNOWN));
-					else
-					if(bfc==BFC.CERTIFY || bfc==BFC.CERTIFY_CCW)
-						top().getModelState().setWinding(winding(Winding.CCW));
-					else
-					if(bfc == BFC.CERTIFY_CW)
-						top().getModelState().setWinding(winding(Winding.CW));
-					else
-					if(bfc == BFC.CCW) {
-						Winding winding=winding(Winding.CCW);
-						if(!top().getModelState().getWinding().equals(winding)) {
-							top().getModelState().setWinding(winding);
-							handler.winding(top().getModelState());
-						}
-					} else
-					if(bfc == BFC.CW) {
-						Winding winding=winding(Winding.CW);
-						if(!top().getModelState().getWinding().equals(winding)) {
-							top().getModelState().setWinding(winding);
-							handler.winding(top().getModelState());
-						}
-					} else
-					if(bfc == BFC.INVERTNEXT) {
-						// System.err.println("INVERTNEXT");
-						top().setInvertNext(true);
-					} else
-					if(bfc == BFC.CLIP) {
-						// System.err.println("BFC.CLIP");
-						if(!top().getModelState().isClipping()) {
-							top().getModelState().setClipping(true);
-							handler.clipping(top().getModelState());
-						}
-					} else
-					if(bfc == BFC.NOCLIP) {
-						// System.err.println("BFC.NOCLIP");
-						if(top().getModelState().isClipping()) {
-							top().getModelState().setClipping(false);
-							handler.clipping(top().getModelState());
-						}
 					}
-					else
-						throw new InternalLDRAWException("Unrecognized BFC: "+bfc);
+					top().setInvertNext(false);
+
+					switch (bfc) {
+						case NOCERTIFY:
+							top().getModelState().setWinding(winding(Winding.UNKNOWN));
+							break;
+						case CERTIFY:
+						case CERTIFY_CCW:
+							top().getModelState().setWinding(winding(Winding.CCW));
+							break;
+						case CERTIFY_CW:
+							top().getModelState().setWinding(winding(Winding.CW));
+							break;
+						case CCW:
+							Winding winding = winding(Winding.CCW);
+							if (!top().getModelState().getWinding().equals(winding)) {
+								top().getModelState().setWinding(winding);
+								handler.winding(top().getModelState());
+							}
+							break;
+						case CW:
+							Winding windingCw = winding(Winding.CW);
+							if (!top().getModelState().getWinding().equals(windingCw)) {
+								top().getModelState().setWinding(windingCw);
+								handler.winding(top().getModelState());
+							}
+							break;
+						case INVERTNEXT:
+							top().setInvertNext(true);
+							break;
+						case CLIP:
+							if (!top().getModelState().isClipping()) {
+								top().getModelState().setClipping(true);
+								handler.clipping(top().getModelState());
+							}
+							break;
+						case NOCLIP:
+							if (top().getModelState().isClipping()) {
+								top().getModelState().setClipping(false);
+								handler.clipping(top().getModelState());
+							}
+					}
 				}
-				
+
 				public void line(ColourReference colour, Point3f[] line) throws LDRAWException {
-					if(top().isInvertNext())
+					if (top().isInvertNext())
 						System.err.println("WARNING: Ignoring illegal INVERTNEXT");
 					handler.line(top().getModelState(), eval(colour), transform(line));
 					top().setInvertNext(false);
 				}
-	
+
 				public void triangle(ColourReference colour, Point3f[] triangle) throws LDRAWException {
-					if(top().isInvertNext())
+					if (top().isInvertNext())
 						System.err.println("WARNING: Ignoring illegal INVERTNEXT");
 					handler.triangle(top().getModelState(), eval(colour), transform(triangle));
 					top().setInvertNext(false);
 				}
-	
+
 				public void quadrilateral(ColourReference colour, Point3f[] quad) throws LDRAWException {
-					if(top().isInvertNext())
+					if (top().isInvertNext())
 						System.err.println("WARNING: Ignoring illegal INVERTNEXT");
 					handler.quadrilateral(top().getModelState(), eval(colour), transform(quad));
 					top().setInvertNext(false);
 				}
-	
-				public void optionalLine(ColourReference colour, Point3f[] line, Point3f[] controlPoints) throws LDRAWException {
-					if(top().isInvertNext())
-						System.err.println("WARNING: Ignoring illegal INVERTNEXT");				
-					handler.optionalLine(top().getModelState(), eval(colour), transform(line), transform(controlPoints));
+
+				public void optionalLine(ColourReference colour, Point3f[] line, Point3f[] controlPoints)
+						throws LDRAWException {
+					if (top().isInvertNext())
+						System.err.println("WARNING: Ignoring illegal INVERTNEXT");
+					handler.optionalLine(top().getModelState(), eval(colour), transform(line),
+							transform(controlPoints));
 					top().setInvertNext(false);
 				}
-				
+
 				protected Point3f[] transform(Point3f[] points) {
-					Point3f[] mypoints=new Point3f[points.length];
-					for(int i=0;i<points.length;i++)
-						mypoints[i] = top().getModelState().getRotation().mul(points[i]).add(top().getModelState().getTranslation());
+					Point3f[] mypoints = new Point3f[points.length];
+					for (int i = 0; i < points.length; i++)
+						mypoints[i] = top().getModelState().getRotation().mul(points[i])
+								.add(top().getModelState().getTranslation());
 					return mypoints;
 				}
-				
+
 				protected Winding winding(Winding winding) {
-					Winding result;
-					if(winding.equals(Winding.UNKNOWN))
-						result = Winding.UNKNOWN;
-					else
-					if(top().isInverted()) {
-						if(winding.equals(Winding.CW))
-							result = Winding.CCW;
-						else
-						if(winding.equals(Winding.CCW))
-							result = Winding.CW;
-						else
-							throw new IllegalArgumentException("Unrecognized winding: "+winding);
+					switch (winding) {
+						case CW:
+							return top().isInverted() ? Winding.CCW : Winding.CW;
+						case CCW:
+							return top().isInverted() ? Winding.CW : Winding.CCW;
+						default:
+							return winding;
 					}
-					else
-						result = winding;
-					// System.err.println("Winding = "+winding+" -> "+result+" ("+top().isInverted()+")");
-					return result;
 				}
-	
-				public void subfile(ColourReference colour, Point3f st, Matrix3f sr, String file) throws LDRAWException, IOException {
-					State newstate=new State(file);
-					
+
+				public void subfile(ColourReference colour, Point3f st, Matrix3f sr, String file)
+						throws LDRAWException, IOException {
+					State newstate = new State(file);
+
 					newstate.setInverted(top().isInverted() ^ top().isInvertNext());
-					
+
 					newstate.setCurrentColour(colour.eval(getConfig().getColours(), top().getCurrentColour()));
-	
-					if(newstate.isInverted())
+
+					if (newstate.isInverted())
 						newstate.getModelState().setWinding(Winding.CW);
-					else 
+					else
 						newstate.getModelState().setWinding(Winding.CCW);
-					
-					Point3f t=top().getModelState().getTranslation();
-					Matrix3f r=top().getModelState().getRotation();
-					
+
+					Point3f t = top().getModelState().getTranslation();
+					Matrix3f r = top().getModelState().getRotation();
+
 					newstate.getModelState().setRotation(r.mul(sr));
-					
+
 					newstate.getModelState().setTranslation(new Point3f(new float[] {
-						r.get(0,0)*st.x()+r.get(0, 1)*st.y()+r.get(0, 2)*st.z()+t.x(),
-						r.get(1,0)*st.x()+r.get(1, 1)*st.y()+r.get(1, 2)*st.z()+t.y(),
-						r.get(2,0)*st.x()+r.get(2, 1)*st.y()+r.get(2, 2)*st.z()+t.z()
+							r.get(0, 0) * st.x() + r.get(0, 1) * st.y() + r.get(0, 2) * st.z() + t.x(),
+							r.get(1, 0) * st.x() + r.get(1, 1) * st.y() + r.get(1, 2) * st.z() + t.y(),
+							r.get(2, 0) * st.x() + r.get(2, 1) * st.y() + r.get(2, 2) * st.z() + t.z()
 					}));
-					
-					String padding="";
-					for(int i=0;i<depth;i++)
-						padding = padding+" ";
-					// System.err.println(padding+"subfile -> "+newstate.isInverted()+" = "+newstate.getModelState().getName()+" ("+newstate.getModelState().getWinding()+")");
+
+					String padding = "";
+					for (int i = 0; i < depth; i++)
+						padding = padding + " ";
+					// System.err.println(padding+"subfile -> "+newstate.isInverted()+" =
+					// "+newstate.getModelState().getName()+"
+					// ("+newstate.getModelState().getWinding()+")");
 					// System.err.println(padding+sr);
 					// System.err.println(padding+newstate.getModelState().getRotation());
 					// System.err.println(padding+newstate.getModelState().getTranslation());
-					depth = depth+1;
-					
+					depth = depth + 1;
+
 					push(newstate);
 					try {
 						parse(new FileReader(part(file)));
-					}
-					finally {
+					} finally {
 						pop();
 					}
-					
-					depth = depth-1;
-					
+
+					depth = depth - 1;
+
 					top().setInvertNext(false);
 				}
 
@@ -314,8 +309,7 @@ public class LDRAWModelReader {
 					handler.meta(line);
 				}
 			}).read(in);
-		}
-		finally {
+		} finally {
 			handler.leaveFile(top().getModelState().getName());
 		}
 	}

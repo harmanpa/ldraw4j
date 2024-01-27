@@ -32,13 +32,11 @@ public class BrickLibrary {
 				path.append(File.separatorChar);
 				path.append(file.getName());
 				
-				if(isdatfile)
+				if(isdatfile) {
 					entries.add(path.toString());
-				else
-				if(isdirectory)
+				} else if(isdirectory) {
 					scan(file, path, entries);
-				else
-					throw new InternalLDRAWException("Not a dat file or a directory");
+				}
 				
 				path.setLength(path.length()-(file.getName().length()+1));
 			}

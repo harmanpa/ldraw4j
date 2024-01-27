@@ -255,13 +255,13 @@ public class LDRAWReader {
 				
 				Date date=d(m.group(1), DATE, "Bad date in HISTORY line: "+m.group(1));
 				Name name;
-				if(m.group(2).startsWith("{"))
+				if(m.group(2).startsWith("{")) {
 					name = new RealName(m.group(2).substring(1, m.group(2).length()-1));
-				else
-				if(m.group(2).startsWith("["))
+				} else if(m.group(2).startsWith("[")) {
 					name = new UserName(m.group(2).substring(1, m.group(2).length()-1));
-				else
-					throw new InternalLDRAWException("Unhandled case for name: "+m.group(2));
+				} else {
+					throw new LDRAWException("Unhandled case for name: "+m.group(2));
+				}
 				String message=m.group(3);
 				
 				handler.history(date, name, message);
@@ -493,14 +493,13 @@ public class LDRAWReader {
 		MatchResult m=require(size, SIZE, "Invalid material size: "+size);
 		
 		Size result;
-		if(m.group(1) != null)
+		if(m.group(1) != null) {
 			result = new SingleSize(Integer.parseInt(m.group(1)));
-		else
-		if(m.group(2) != null)
+		} else if(m.group(2) != null) {
 			result = new MinMaxSize(Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
-		else
-			throw new InternalLDRAWException("Did not parse size: "+size);
-		
+		} else {
+			throw new LDRAWException("Did not parse size: "+size);
+		}		
 		return result;
 	}
 	
