@@ -17,8 +17,6 @@ import java.io.File;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.sigpwned.ldraw4j.x.InternalLDRAWException;
-
 public class BrickLibrary {
 	public static BrickLibrary scan(File home) {
 		return new BrickLibrary(home, scan(home, new StringBuilder(), new TreeSet<String>()));

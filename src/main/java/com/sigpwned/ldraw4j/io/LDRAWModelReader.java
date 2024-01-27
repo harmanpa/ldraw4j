@@ -29,7 +29,6 @@ import com.sigpwned.ldraw4j.model.colour.ColourReference;
 import com.sigpwned.ldraw4j.model.geometry.Matrix3f;
 import com.sigpwned.ldraw4j.model.geometry.Point3f;
 import com.sigpwned.ldraw4j.model.winding.BFC;
-import com.sigpwned.ldraw4j.x.InternalLDRAWException;
 import com.sigpwned.ldraw4j.x.LDRAWException;
 
 public class LDRAWModelReader {

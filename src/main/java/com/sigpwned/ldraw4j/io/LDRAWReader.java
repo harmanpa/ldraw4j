@@ -53,7 +53,6 @@ import com.sigpwned.ldraw4j.model.name.UserName;
 import com.sigpwned.ldraw4j.model.winding.BFC;
 import com.sigpwned.ldraw4j.util.CollectionUtil;
 import com.sigpwned.ldraw4j.util.StringUtil;
-import com.sigpwned.ldraw4j.x.InternalLDRAWException;
 import com.sigpwned.ldraw4j.x.LDRAWException;
 import com.sigpwned.ldraw4j.x.LeakedLDRAWException;
 
