@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sigpwned.ldraw4j.io.handle.ldraw.AbstractLDRAWReadHandler;
+import com.sigpwned.ldraw4j.io.handle.ldraw.MultipleLDRAWReadHandler;
 import com.sigpwned.ldraw4j.io.model.ModelState;
 import com.sigpwned.ldraw4j.io.model.Winding;
 import com.sigpwned.ldraw4j.model.Colour;
@@ -133,7 +134,7 @@ public class LDRAWModelReader {
 	protected void parse(Reader in) throws IOException, LDRAWException {
 		handler.enterFile(top().getModelState().getName());
 		try {
-			new LDRAWReader(new AbstractLDRAWReadHandler() {
+			LDRAWReadHandler readHandler = new AbstractLDRAWReadHandler() {
 				public void bfc(BFC bfc) throws LDRAWException {
 					if (top().isInvertNext()) {
 						System.err.println("WARNING: Ignoring illegal INVERTNEXT");
@@ -268,10 +269,10 @@ public class LDRAWModelReader {
 
 					push(newstate);
 					Reader reader = getConfig().getLibrary().find(file);
-					if(reader==null) {
+					if (reader == null) {
 						throw new LDRAWException("Could not find " + file);
 					}
-					try(reader) {
+					try (reader) {
 						parse(reader);
 					} finally {
 						pop();
@@ -285,7 +286,10 @@ public class LDRAWModelReader {
 				public void meta(String line) throws LDRAWException {
 					handler.meta(line);
 				}
-			}).read(in);
+			};
+			new LDRAWReader(handler instanceof LDRAWReadHandler
+					? new MultipleLDRAWReadHandler((LDRAWReadHandler) handler, readHandler)
+					: readHandler).read(in);
 		} finally {
 			handler.leaveFile(top().getModelState().getName());
 		}

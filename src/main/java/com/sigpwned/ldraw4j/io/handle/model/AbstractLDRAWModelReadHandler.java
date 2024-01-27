@@ -17,6 +17,7 @@ import com.sigpwned.ldraw4j.io.LDRAWModelReadHandler;
 import com.sigpwned.ldraw4j.io.model.ModelState;
 import com.sigpwned.ldraw4j.model.Colour;
 import com.sigpwned.ldraw4j.model.geometry.Point3f;
+import com.sigpwned.ldraw4j.x.LDRAWException;
 
 public class AbstractLDRAWModelReadHandler implements LDRAWModelReadHandler {
 	public void line(ModelState modelState, Colour colour, Point3f[] line) {
@@ -35,6 +36,6 @@ public class AbstractLDRAWModelReadHandler implements LDRAWModelReadHandler {
 	}
 	public void leaveFile(String name) {
 	}
-	public void meta(String line) {
+	public void meta(String line) throws LDRAWException {
 	}
 }
