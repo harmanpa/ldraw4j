@@ -74,10 +74,9 @@ public class LDRAWModelReader {
 		}
 	}
 
-	private LDRAWConfiguration config;
-	private LDRAWModelReadHandler handler;
-	private BufferedReader lines;
-	private List<State> stateStack;
+	private final LDRAWConfiguration config;
+	private final LDRAWModelReadHandler handler;
+	private final List<State> stateStack;
 
 	public LDRAWModelReader(LDRAWConfiguration config, LDRAWModelReadHandler handler) {
 		this.config = config;
@@ -86,47 +85,22 @@ public class LDRAWModelReader {
 	}
 
 	public void read(String name) throws IOException, LDRAWException {
-		read(name, new FileReader(part(name)));
-	}
-
-	protected File part(String name) throws LDRAWException {
-		name = name.replace('\\', File.separatorChar);
-
-		File result = null;
-		for (File home : new File[] { new File(getConfig().getHome(), "parts"),
-				new File(new File(getConfig().getHome(), "p"), "48"),
-				new File(new File(getConfig().getHome(), "p"), "8"), new File(getConfig().getHome(), "p"),
-				new File(System.getProperty("user.home"), "Temporary") }) {
-			// for(File home : new File[]{new File(getConfig().getHome(), "parts"), new
-			// File(getConfig().getHome(), "p")}) {
-			result = new File(home, name);
-			if (result.exists()) {
-				// System.err.println(result.getAbsolutePath());
-				break;
-			}
-		}
-		if (result == null) {
-			throw new LDRAWException("Part file not found for " + name);
-		}
-		return result;
+		read(name, getConfig().getLibrary().find(name));
 	}
 
 	public void read(String name, Reader in) throws IOException, LDRAWException {
-		try {
-			try {
-				lines = new BufferedReader(in);
+		if (in == null) {
+			throw new LDRAWException("Could not find " + name);
+		}
+		try (in) {
+			try (BufferedReader lines = new BufferedReader(in)) {
 				push(new State(name));
 				try {
 					parse(in);
 				} finally {
 					pop();
 				}
-			} finally {
-				lines.close();
-				lines = null;
 			}
-		} finally {
-			in.close();
 		}
 	}
 
@@ -293,8 +267,12 @@ public class LDRAWModelReader {
 					depth = depth + 1;
 
 					push(newstate);
-					try {
-						parse(new FileReader(part(file)));
+					Reader reader = getConfig().getLibrary().find(file);
+					if(reader==null) {
+						throw new LDRAWException("Could not find " + file);
+					}
+					try(reader) {
+						parse(reader);
 					} finally {
 						pop();
 					}
