@@ -52,7 +52,9 @@ public class Point3f {
 	public String toString() {
 		StringBuilder result=new StringBuilder();
 		for(int i=0;i<xyz.length;i++) {
-			if(result.length() != 0) result.append(" ");
+			if(result.length() != 0) {
+                            result.append(" ");
+                        }
 			result.append(StringUtil.f(get(i)));
 		}
 		return result.toString();
@@ -60,15 +62,17 @@ public class Point3f {
 	
 	public Point3f add(Point3f o) {
 		float[] result=new float[3];
-		for(int i=0;i<3;i++)
-			result[i] = get(i)+o.get(i);
+		for(int i=0;i<3;i++) {
+                    result[i] = get(i)+o.get(i);
+                }
 		return new Point3f(result);
 	}
 	
 	public Point3f sub(Point3f o) {
 		float[] result=new float[3];
-		for(int i=0;i<3;i++)
-			result[i] = get(i)-o.get(i);
+		for(int i=0;i<3;i++) {
+                    result[i] = get(i)-o.get(i);
+                }
 		return new Point3f(result);		
 	}
 }

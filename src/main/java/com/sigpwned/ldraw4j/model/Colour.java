@@ -68,12 +68,12 @@ public class Colour {
 	public boolean equals(Object other) {
 		boolean result;
 		
-		if(this == other)
-			result = true;
-		else
-		if(other == null)
-			result = false;
-		else
+		if(this == other) {
+                    result = true;
+                } else
+		if(other == null) {
+                    result = false;
+                } else
 		if(other instanceof Colour) {
 			Colour otherp=(Colour) other;
 			result = true;
@@ -84,8 +84,9 @@ public class Colour {
 			result = result && equal(getValue(), otherp.getValue());
 			result = result && equal(getEdge(), otherp.getEdge());
 		}
-		else
-			result = false;
+		else {
+                    result = false;
+                }
 		
 		return result;
 	}

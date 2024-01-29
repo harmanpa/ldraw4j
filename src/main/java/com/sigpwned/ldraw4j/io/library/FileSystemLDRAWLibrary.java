@@ -2,9 +2,8 @@ package com.sigpwned.ldraw4j.io.library;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.Reader;
 import java.io.FileReader;
-import com.sigpwned.ldraw4j.io.LDRAWLibrary;
+import java.io.Reader;
 
 public class FileSystemLDRAWLibrary extends AbstractLDRAWLibrary {
     private final File home;

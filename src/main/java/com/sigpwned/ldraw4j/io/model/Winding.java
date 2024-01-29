@@ -26,8 +26,9 @@ public enum Winding {
 	public Winding inverted() {
 		if(inverted == null) {
 			synchronized(this) {
-				if(inverted == null)
-					inverted = valueOf(invertedName);
+				if(inverted == null) {
+                                    inverted = valueOf(invertedName);
+                                }
 			}
 		}
 		return inverted;

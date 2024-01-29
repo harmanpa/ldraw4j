@@ -13,10 +13,6 @@
 // limitations under the License.
 package com.sigpwned.ldraw4j.io;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
 import com.sigpwned.ldraw4j.model.colour.ColourReference;
 import com.sigpwned.ldraw4j.model.colour.Material;
 import com.sigpwned.ldraw4j.model.colour.RGBA;
@@ -29,6 +25,9 @@ import com.sigpwned.ldraw4j.model.name.RealName;
 import com.sigpwned.ldraw4j.model.name.UserName;
 import com.sigpwned.ldraw4j.model.winding.BFC;
 import com.sigpwned.ldraw4j.x.LDRAWException;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Process a file in LDRAW format. The file format is documented pretty well on

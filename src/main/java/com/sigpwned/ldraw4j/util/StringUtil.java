@@ -32,10 +32,11 @@ public class StringUtil {
 		MatchResult result;
 		
 		Matcher matcher=pattern.matcher(string);
-		if(matcher.find(start))
-			result = matcher;
-		else
-			result = null;
+		if(matcher.find(start)) {
+                    result = matcher;
+                } else {
+                    result = null;
+                }
 		
 		return result;
 	}
@@ -49,14 +50,17 @@ public class StringUtil {
 		
 		int start=0;
 		for(MatchResult match=match(haystack, needle, start);match!=null;match=match(haystack, needle, start)) {
-			if(start != match.start())
-				result.add(haystack.substring(start, match.start()));
-			if(delims)
-				result.add(match.group());
+			if(start != match.start()) {
+                            result.add(haystack.substring(start, match.start()));
+                        }
+			if(delims) {
+                            result.add(match.group());
+                        }
 			start = match.end();
 		}
-		if(start != haystack.length())
-			result.add(haystack.substring(start, haystack.length()));
+		if(start != haystack.length()) {
+                    result.add(haystack.substring(start, haystack.length()));
+                }
 		
 		return result;
 	}
@@ -67,22 +71,25 @@ public class StringUtil {
 
 	public static List<String> toUpperCase(Collection<String> values) {
 		List<String> result=new ArrayList<String>();
-		for(String value : values)
-			result.add(value.toUpperCase());
+		for(String value : values) {
+                    result.add(value.toUpperCase());
+                }
 		return result;
 	}
 
 	public static List<String> toLowerCase(Collection<String> values) {
 		List<String> result=new ArrayList<String>();
-		for(String value : values)
-			result.add(value.toLowerCase());
+		for(String value : values) {
+                    result.add(value.toLowerCase());
+                }
 		return result;
 	}
 
 	public static List<String> trim(Collection<String> values) {
 		List<String> result=new ArrayList<String>();
-		for(String value : values)
-			result.add(value.trim());
+		for(String value : values) {
+                    result.add(value.trim());
+                }
 		return result;
 	}
 	
@@ -91,10 +98,11 @@ public class StringUtil {
 		
 		double d=f;
 		double floor=Math.floor(f);
-		if(d-floor <= 0.001)
-			result = Integer.toString((int) floor);
-		else
-			result = Float.toString(f);
+		if(d-floor <= 0.001) {
+                    result = Integer.toString((int) floor);
+                } else {
+                    result = Float.toString(f);
+                }
 		
 		return result;
 	}

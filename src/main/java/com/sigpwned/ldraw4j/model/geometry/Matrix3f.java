@@ -27,11 +27,14 @@ public class Matrix3f {
 	public float[][] data;
 
 	public Matrix3f(float[][] data) {
-		if(data.length != 3)
-			throw new IllegalArgumentException("Matrix3f data must have 3 rows");
-		for(int row=0;row<data.length;row++)
-			if(data[row].length != 3)
-				throw new IllegalArgumentException("Matrix3f row "+row+" must have 3 columns");
+		if(data.length != 3) {
+                    throw new IllegalArgumentException("Matrix3f data must have 3 rows");
+                }
+		for(int row=0;row<data.length;row++) {
+                    if (data[row].length != 3) {
+                        throw new IllegalArgumentException("Matrix3f row "+row+" must have 3 columns");
+                    }
+                }
 		this.data = data;
 	}
 
@@ -45,22 +48,27 @@ public class Matrix3f {
 
 	public String toString() {
 		StringBuilder result=new StringBuilder();
-		for(int row=0;row<data.length;row++)
-			for(int col=0;col<data[row].length;col++) {
-				if(!result.equals("")) result.append(" ");
-				result.append(StringUtil.f(get(row, col)));
-			}
+		for(int row=0;row<data.length;row++) {
+                    for (int col = 0; col<data[row].length; col++) {
+                        if (!result.equals("")) {
+                            result.append(" ");
+                        }
+                        result.append(StringUtil.f(get(row, col)));
+                    }
+                }
 		return result.toString();
 	}
 	
 	public Matrix3f mul(Matrix3f o) {
 		float[][] result=new float[3][3];
-		for(int i=0;i<3;i++)
-			for(int j=0;j<3;j++) {
-				result[i][j] = 0.0f;
-				for(int a=0;a<3;a++)
-					result[i][j] = result[i][j]+get(i, a)*o.get(a, j);
-			}
+		for(int i=0;i<3;i++) {
+                    for (int j = 0; j<3; j++) {
+                        result[i][j] = 0.0f;
+                        for (int a = 0; a<3; a++) {
+                            result[i][j] = result[i][j]+get(i, a)*o.get(a, j);
+                        }
+                    }
+                }
 		return new Matrix3f(result);
 	}
 
@@ -68,8 +76,9 @@ public class Matrix3f {
 		float[] result=new float[3];
 		for(int i=0;i<3;i++) {
 			result[i] = 0.0f;
-			for(int a=0;a<3;a++)
-				result[i] = result[i]+get(i, a)*o.get(a);
+			for(int a=0;a<3;a++) {
+                            result[i] = result[i]+get(i, a)*o.get(a);
+                        }
 		}
 		return new Point3f(result);
 	}
