@@ -172,7 +172,7 @@ public class LDRAWReader {
 	}
 
 	private static final Pattern SUBFILE = Pattern.compile(
-			"^(\\d+)\\s+([+-]?[\\d.]+)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+([-+]?\\d+(?:.\\d*)?)\\s+(.*?)\\s*$");
+			"^(\\d+)\\s+([+-]?[\\d.]+)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+([-+]?\\d*(?:.\\d*)?)\\s+(.*?)\\s*$");
 
 	private void subfile(String line) throws LDRAWException, IOException {
 		MatchResult m = require(line, SUBFILE, "Malformed subfile line: " + line);
