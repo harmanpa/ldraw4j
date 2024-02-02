@@ -36,8 +36,9 @@ public class MultiPartFile implements LDRAWLibrary {
         String currentName = null;
         StringBuilder currentFile = new StringBuilder();
         String firstFile = null;
+        BufferedReader br = new BufferedReader(reader);
         while (true) {
-            String line = new BufferedReader(reader).readLine();
+            String line = br.readLine();
             if (line == null) {
                 if (currentName != null) {
                     chunks.put(currentName, currentFile.toString());
