@@ -24,6 +24,7 @@ import java.util.List;
 import com.sigpwned.ldraw4j.io.handle.ldraw.AbstractLDRAWReadHandler;
 import com.sigpwned.ldraw4j.io.handle.ldraw.MultipleLDRAWReadHandler;
 import com.sigpwned.ldraw4j.io.model.ModelState;
+import com.sigpwned.ldraw4j.io.model.MultiPartFile;
 import com.sigpwned.ldraw4j.io.model.Winding;
 import com.sigpwned.ldraw4j.model.Colour;
 import com.sigpwned.ldraw4j.model.colour.ColourReference;
@@ -78,6 +79,21 @@ public class LDRAWModelReader {
 	private final LDRAWConfiguration config;
 	private final LDRAWModelReadHandler handler;
 	private final List<State> stateStack;
+
+	public static void read(File f, LDRAWLibrary library, LDRAWModelReadHandler handler) throws IOException, LDRAWException {
+		String extension = f.getName().substring(f.getName().lastIndexOf('.') + 1);
+		switch (extension) {
+			case "ldr":
+			case "dat":
+				new LDRAWModelReader(LDRAWConfiguration.load(library), handler).read(f.getName(), new FileReader(f));
+				return;
+			case "mpd":
+				MultiPartFile mpf = new MultiPartFile(new FileReader(f));
+				new LDRAWModelReader(LDRAWConfiguration.load(LDRAWLibrary.combine(mpf, library)), handler)
+						.read(f.getName(), mpf.getReader());
+				return;
+		}
+	}
 
 	public LDRAWModelReader(LDRAWConfiguration config, LDRAWModelReadHandler handler) {
 		this.config = config;

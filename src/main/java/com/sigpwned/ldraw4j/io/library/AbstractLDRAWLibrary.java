@@ -10,7 +10,7 @@ public abstract class AbstractLDRAWLibrary implements LDRAWLibrary {
         switch (type) {
             case CONFIGURATION:
                 return findAtPath("/" + name.replace('\\', '/'));
-            case SHORTCUT:
+            case MODEL:
                 return findAtPath("/models/" + name.replace('\\', '/'));
             case PART:
                 return findAtPath("/parts/" + name.replace('\\', '/'));
@@ -27,4 +27,5 @@ public abstract class AbstractLDRAWLibrary implements LDRAWLibrary {
     }
 
     public abstract Reader findAtPath(String path);
+
 }

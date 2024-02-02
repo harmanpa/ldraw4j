@@ -17,4 +17,18 @@ public interface LDRAWLibrary {
     }
 
     public Reader find(FileType type, String name);
+
+    public static LDRAWLibrary combine(LDRAWLibrary... libraries) {
+        return new LDRAWLibrary() {
+            public Reader find(FileType type, String name) {
+                for(LDRAWLibrary library : libraries) {
+                    Reader r = library.find(type, name);
+                    if(r!=null) {
+                        return r;
+                    }
+                }
+                return null;
+            }
+        };
+    }
 }
