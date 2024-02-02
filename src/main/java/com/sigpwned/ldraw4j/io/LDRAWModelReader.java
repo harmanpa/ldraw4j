@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import java.io.FileReader;
 
 public class LDRAWModelReader {
 	private static class State {
