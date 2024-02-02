@@ -204,7 +204,7 @@ public class LDRAWReader {
 			Pattern.CASE_INSENSITIVE);
 	private static final Pattern AUTHOR_ARGS = Pattern.compile("^([^\\[]+?)?\\s*(?:\\[([^\\]]+)\\])?$");
 	private static final Pattern LDRAW_ORG_ARGS = Pattern.compile(
-			"^(part|subpart|primitive|48_primitive|8_primitive|shortcut|configuration)\\s+(\\S.*?\\s+)?(original|update\\s+(\\d+)-(\\d+)(?:-(\\d+))?)$",
+			"^(model|part|subpart|primitive|48_primitive|8_primitive|shortcut|configuration)\\s+(\\S.*?\\s+)?(original|update\\s+(\\d+)-(\\d+)(?:-(\\d+))?)$",
 			Pattern.CASE_INSENSITIVE);
 	private static final Pattern LICENSE_REDISTRIBUTABLE = Pattern.compile("(?!=not)\\s*redistributable",
 			Pattern.CASE_INSENSITIVE);
