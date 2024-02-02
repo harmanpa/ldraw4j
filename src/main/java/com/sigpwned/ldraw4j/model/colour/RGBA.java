@@ -30,8 +30,9 @@ public class RGBA {
 		Integer lookup=Integer.valueOf(rgba);
 		
 		RGBA result=palette.get(lookup);
-		if(result == null)
-			palette.put(lookup, result = new RGBA(rgba));
+		if(result == null) {
+                    palette.put(lookup, result = new RGBA(rgba));
+                }
 		
 		return result;
 	}
@@ -69,11 +70,17 @@ public class RGBA {
 	public String getRGBString() {
 		StringBuilder result=new StringBuilder();
 		result.append("#");
-		if(getRed() < 16) result.append("0");
+		if(getRed() < 16) {
+                    result.append("0");
+                }
 		result.append(Integer.toString(getRed(), 16));
-		if(getGreen() < 16) result.append("0");
+		if(getGreen() < 16) {
+                    result.append("0");
+                }
 		result.append(Integer.toString(getGreen(), 16));
-		if(getBlue() < 16) result.append("0");
+		if(getBlue() < 16) {
+                    result.append("0");
+                }
 		result.append(Integer.toString(getBlue(), 16));
 		return result.toString();
 	}
@@ -89,12 +96,12 @@ public class RGBA {
 	public boolean equals(Object other) {
 		boolean result;
 		
-		if(this == other)
-			result = true;
-		else
-		if(other == null)
-			result = false;
-		else
+		if(this == other) {
+                    result = true;
+                } else
+		if(other == null) {
+                    result = false;
+                } else
 		if(other instanceof RGBA) {
 			RGBA otherp=(RGBA) other;
 			result = true;
@@ -103,8 +110,9 @@ public class RGBA {
 			result = result && getBlue()==otherp.getBlue();
 			result = result && getAlpha()==otherp.getAlpha();
 		}
-		else
-			result = false;
+		else {
+                    result = false;
+                }
 		
 		return result;
 	}

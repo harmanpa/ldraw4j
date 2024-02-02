@@ -13,10 +13,9 @@
 // limitations under the License.
 package com.sigpwned.ldraw4j.model.colour;
 
+import com.sigpwned.ldraw4j.model.Colour;
 import java.util.Map;
 import java.util.TreeMap;
-
-import com.sigpwned.ldraw4j.model.Colour;
 
 public class Colours {
 	private Colour defaultColour;
@@ -45,9 +44,10 @@ public class Colours {
 	}
 	
 	public void defineColour(Colour colour) {
-		if(colour.getCode() != null)
-			getColours().put(colour.getCode(), colour);
-		else
-			System.err.println("WARNING: Could not define colour without code");
+		if(colour.getCode() != null) {
+                    getColours().put(colour.getCode(), colour);
+        } else {
+                    System.err.println("WARNING: Could not define colour without code");
+        }
 	}
 }

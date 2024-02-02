@@ -49,10 +49,12 @@ public class SpeckleMaterial extends AbstractMaterial {
 		StringBuilder result=new StringBuilder();
 		result.append("MATERIAL SPECKLE VALUE ");
 		result.append(getValue().getRGBString());
-		if(getValue().isAlphaDefined())
-			result.append(" ALPHA "+getValue().getAlpha());
-		if(getLuminance() != null)
-			result.append(" LUMINANCE "+getLuminance().intValue());
+		if(getValue().isAlphaDefined()) {
+                    result.append(" ALPHA "+getValue().getAlpha());
+                }
+		if(getLuminance() != null) {
+                    result.append(" LUMINANCE "+getLuminance().intValue());
+                }
 		result.append(" FRACTION "+getFraction());
 		result.append(" "+getSize());
 		return result.toString();

@@ -55,10 +55,12 @@ public class GlitterMaterial extends AbstractMaterial {
 		StringBuilder result=new StringBuilder();
 		result.append("MATERIAL GLITTER VALUE ");
 		result.append(getValue().getRGBString());
-		if(getValue().isAlphaDefined())
-			result.append(" ALPHA "+getValue().getAlpha());
-		if(getLuminance() != null)
-			result.append(" LUMINANCE "+getLuminance().intValue());
+		if(getValue().isAlphaDefined()) {
+                    result.append(" ALPHA "+getValue().getAlpha());
+                }
+		if(getLuminance() != null) {
+                    result.append(" LUMINANCE "+getLuminance().intValue());
+                }
 		result.append(" FRACTION "+getFraction());
 		result.append(" VFRACTION "+getVfraction());
 		result.append(" "+getSize());

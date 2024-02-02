@@ -13,11 +13,6 @@
 // limitations under the License.
 package com.sigpwned.ldraw4j.io.handle.ldraw;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import com.sigpwned.ldraw4j.io.LDRAWReadHandler;
 import com.sigpwned.ldraw4j.model.colour.ColourReference;
 import com.sigpwned.ldraw4j.model.colour.Material;
@@ -31,6 +26,10 @@ import com.sigpwned.ldraw4j.model.name.RealName;
 import com.sigpwned.ldraw4j.model.name.UserName;
 import com.sigpwned.ldraw4j.model.winding.BFC;
 import com.sigpwned.ldraw4j.x.LDRAWException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class MultipleLDRAWReadHandler implements LDRAWReadHandler {
 	private final List<LDRAWReadHandler> handlers;

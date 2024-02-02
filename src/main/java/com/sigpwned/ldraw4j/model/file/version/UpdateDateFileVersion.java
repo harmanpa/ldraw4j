@@ -13,11 +13,10 @@
 // limitations under the License.
 package com.sigpwned.ldraw4j.model.file.version;
 
+import com.sigpwned.ldraw4j.model.file.FileVersion;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.sigpwned.ldraw4j.model.file.FileVersion;
 
 public class UpdateDateFileVersion extends FileVersion {
 	private Date date;

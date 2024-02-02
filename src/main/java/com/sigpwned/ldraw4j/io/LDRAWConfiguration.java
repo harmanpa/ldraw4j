@@ -13,11 +13,6 @@
 // limitations under the License.
 package com.sigpwned.ldraw4j.io;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-
 import com.sigpwned.ldraw4j.io.handle.ldraw.AbstractLDRAWReadHandler;
 import com.sigpwned.ldraw4j.io.library.FileSystemLDRAWLibrary;
 import com.sigpwned.ldraw4j.model.Colour;
@@ -27,6 +22,9 @@ import com.sigpwned.ldraw4j.model.colour.Material;
 import com.sigpwned.ldraw4j.model.colour.RGBA;
 import com.sigpwned.ldraw4j.model.file.FileType;
 import com.sigpwned.ldraw4j.x.LDRAWException;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 
 public class LDRAWConfiguration {
 	public static LDRAWConfiguration load(File home) throws IOException, LDRAWException {

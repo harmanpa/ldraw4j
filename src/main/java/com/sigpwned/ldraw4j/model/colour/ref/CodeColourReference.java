@@ -42,8 +42,9 @@ public class CodeColourReference extends ColourReference {
 			// http://www.ldraw.org/reference/specs/colors.shtml
 			result = currentColour;
 		}
-		else
-			result = colours.getColour(getCode());
+		else {
+                    result = colours.getColour(getCode());
+                }
 		
 		return result;
 	}
