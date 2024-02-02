@@ -60,7 +60,7 @@ public class MultiPartFile implements LDRAWLibrary {
                     currentName = m.group(1).trim();
                     currentFile = new StringBuilder();
                 } else {
-                    currentFile.append('\n').append(line);
+                    currentFile.append(line).append('\n');
                 }
             }
         }

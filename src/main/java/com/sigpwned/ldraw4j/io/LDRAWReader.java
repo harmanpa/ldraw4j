@@ -90,25 +90,25 @@ public class LDRAWReader {
 			} else {
 				MatchResult m = StringUtil.match(line, LINE);
 				if (m == null) {
-                                    throw new MalformedFileLDRAWException("Non-empty line does not begin with a number: " + line);
-                }
+					throw new MalformedFileLDRAWException("Non-empty line does not begin with a number: " + line);
+				}
 				int code = Integer.parseInt(m.group(1));
 				String command = line.substring(m.end(), line.length()).trim();
 				if (code == 0) {
-                                    meta(command);
-                } else if (code == 1) {
-                    subfile(command);
-                } else if (code == 2) {
-                    line(command);
-                } else if (code == 3) {
-                    triangle(command);
-                } else if (code == 4) {
-                    quadrilateral(command);
-                } else if (code == 5) {
-                    optionalLine(command);
-                } else {
-                    throw new MalformedFileLDRAWException("Illegal code at beginning of line: " + line);
-                }
+					meta(command);
+				} else if (code == 1) {
+					subfile(command);
+				} else if (code == 2) {
+					line(command);
+				} else if (code == 3) {
+					triangle(command);
+				} else if (code == 4) {
+					quadrilateral(command);
+				} else if (code == 5) {
+					optionalLine(command);
+				} else {
+					throw new MalformedFileLDRAWException("Illegal code at beginning of line: " + line);
+				}
 			}
 		}
 	}
@@ -185,8 +185,8 @@ public class LDRAWReader {
 		for (int i = 0; i < 3; i++) {
 			rotationCoords[i] = new float[3];
 			for (int j = 0; j < 3; j++) {
-                            rotationCoords[i][j] = Float.parseFloat(m.group(5 + 3 * i + j));
-            }
+				rotationCoords[i][j] = Float.parseFloat(m.group(5 + 3 * i + j));
+			}
 		}
 		Matrix3f rotation = new Matrix3f(rotationCoords);
 
@@ -219,14 +219,14 @@ public class LDRAWReader {
 			String command = m.group().toLowerCase();
 			String arguments = line.substring(m.end(), line.length()).trim();
 			if (command.equals("!name") || command.equals("name:")) {
-                            handler.name(arguments);
-            } else if (command.equals("!author") || command.equals("author:")) {
+				handler.name(arguments);
+			} else if (command.equals("!author") || command.equals("author:")) {
 				m = require(arguments, AUTHOR_ARGS, "Malformed author line: " + arguments);
 				RealName realName = new RealName(m.group(1));
 				UserName userName = null;
 				if (m.group(2) != null) {
-                                    userName = new UserName(m.group(2));
-                }
+					userName = new UserName(m.group(2));
+				}
 				handler.author(realName, userName);
 			} else if (command.equals("!ldraw_org")) {
 				m = require(arguments, LDRAW_ORG_ARGS, "Malformed LDRAW_ORG line: " + arguments);
@@ -244,15 +244,15 @@ public class LDRAWReader {
 				FileVersion partVersion;
 				String partVersionText = m.group(3).toLowerCase();
 				if (partVersionText.equals("original")) {
-                                    partVersion = OriginalFileVersion.getInstance();
-                } else if (m.group(6) != null) {
+					partVersion = OriginalFileVersion.getInstance();
+				} else if (m.group(6) != null) {
 					String dateline = m.group(4) + "-" + m.group(5) + "-" + m.group(6);
 					partVersion = new UpdateDateFileVersion(
 							d(dateline, DATE, "Invalid date in LDRAW_ORG line: " + dateline));
 				} else {
-                    partVersion = new UpdateRevisionFileVersion(Integer.parseInt(m.group(4)),
-                            Integer.parseInt(m.group(5)));
-                }
+					partVersion = new UpdateRevisionFileVersion(Integer.parseInt(m.group(4)),
+							Integer.parseInt(m.group(5)));
+				}
 
 				handler.ldraworg(partType, qualifiers, partVersion);
 			} else if (command.equals("!bfc") || command.equals("bfc")) {
@@ -285,60 +285,60 @@ public class LDRAWReader {
 
 				ColourReference edge;
 				if (StringUtil.match(m.group(4), INT) != null) {
-                                    edge = new CodeColourReference(Integer.parseInt(m.group(4)));
-                } else {
-                                    edge = new RGBAColourReference(rgba(m.group(4), null));
-                }
+					edge = new CodeColourReference(Integer.parseInt(m.group(4)));
+				} else {
+					edge = new RGBAColourReference(rgba(m.group(4), null));
+				}
 
 				Integer alpha;
 				if (m.group(5) != null) {
-                                    alpha = Integer.parseInt(m.group(5));
-                } else {
-                                    alpha = null;
-                }
+					alpha = Integer.parseInt(m.group(5));
+				} else {
+					alpha = null;
+				}
 
 				RGBA value = rgba(m.group(3), alpha);
 
 				Integer luminance;
 				if (m.group(6) != null) {
-                                    luminance = Integer.parseInt(m.group(6));
-                } else {
-                                    luminance = null;
-                }
+					luminance = Integer.parseInt(m.group(6));
+				} else {
+					luminance = null;
+				}
 
 				Material material;
 				if (m.group(7) != null) {
-                                    material = material(m.group(7));
-                } else {
-                                    material = null;
-                }
+					material = material(m.group(7));
+				} else {
+					material = null;
+				}
 
 				handler.colour(name, code, value, edge, luminance, material);
 			} else if (command.equals("!license")) {
-                            handler.license(arguments, StringUtil.match(arguments, LICENSE_REDISTRIBUTABLE) != null);
-            } else if (command.equals("!category")) {
-                handler.category(arguments);
-            } else if (command.equals("!cmdline")) {
-                handler.commandLine(arguments);
-            } else if (command.equals("!keywords")) {
-                handler.keywords(StringUtil.trim(StringUtil.split(arguments, StringUtil.COMMA)));
-            } else if (command.equals("!help")) {
-                handler.help(arguments);
-            } else if (command.equals("clear") || command.equals("!clear")) {
-                handler.clear();
-            } else if (command.equals("pause") || command.equals("!pause")) {
-                handler.pause();
-            } else if (command.equals("print") || command.equals("!print")) {
-                handler.print(arguments);
-            } else if (command.equals("save") || command.equals("!save")) {
-                handler.save();
-            } else if (command.equals("step") || command.equals("!step")) {
-                handler.step();
-            } else if (command.equals("write") || command.equals("!write")) {
-                handler.write(arguments);
-            } else {
-                handler.meta(line);
-            }
+				handler.license(arguments, StringUtil.match(arguments, LICENSE_REDISTRIBUTABLE) != null);
+			} else if (command.equals("!category")) {
+				handler.category(arguments);
+			} else if (command.equals("!cmdline")) {
+				handler.commandLine(arguments);
+			} else if (command.equals("!keywords")) {
+				handler.keywords(StringUtil.trim(StringUtil.split(arguments, StringUtil.COMMA)));
+			} else if (command.equals("!help")) {
+				handler.help(arguments);
+			} else if (command.equals("clear") || command.equals("!clear")) {
+				handler.clear();
+			} else if (command.equals("pause") || command.equals("!pause")) {
+				handler.pause();
+			} else if (command.equals("print") || command.equals("!print")) {
+				handler.print(arguments);
+			} else if (command.equals("save") || command.equals("!save")) {
+				handler.save();
+			} else if (command.equals("step") || command.equals("!step")) {
+				handler.step();
+			} else if (command.equals("write") || command.equals("!write")) {
+				handler.write(arguments);
+			} else {
+				handler.meta(line);
+			}
 		} else if (lineno == 1) {
 			// This is an explicit property of the header. First line with a
 			// 0 is always the part description.
@@ -352,9 +352,9 @@ public class LDRAWReader {
 				} else if (line.equals("conditional lines")) {
 					// Ignore
 				} else {
-                                    System.err.println(
-                                            "WARNING: Line not marked explicitly as a comment being interpreted as comment: " + line);
-                }
+					System.err.println(
+							"WARNING: Line not marked explicitly as a comment being interpreted as comment: " + line);
+				}
 			}
 			handler.comment(line);
 		}
@@ -375,8 +375,8 @@ public class LDRAWReader {
 	private static Point3f p(MatchResult m, int start) {
 		float[] coords = new float[3];
 		for (int i = 0; i < 3; i++) {
-                    coords[i] = Float.parseFloat(m.group(start + i));
-        }
+			coords[i] = Float.parseFloat(m.group(start + i));
+		}
 		return new Point3f(coords);
 	}
 
@@ -393,22 +393,22 @@ public class LDRAWReader {
 	private static MatchResult require(String s, Pattern p, String failure) throws LDRAWException {
 		MatchResult result = StringUtil.match(s, p);
 		if (result == null) {
-                    throw new MalformedFileLDRAWException(failure);
-        }
+			throw new MalformedFileLDRAWException(failure);
+		}
 		return result;
 	}
 
 	private static RGBA rgba(String rgb0, Integer a) throws LDRAWException {
 		String rgb = rgb0;
 		if (rgb.startsWith("0x") || rgb.startsWith("0X")) {
-                    rgb = rgb.substring(2, rgb.length());
-        }
+			rgb = rgb.substring(2, rgb.length());
+		}
 		if (rgb.startsWith("#")) {
-                    rgb = rgb.substring(1, rgb.length());
-        }
+			rgb = rgb.substring(1, rgb.length());
+		}
 		if (rgb.length() != 6) {
-                    throw new MalformedFileLDRAWException("Invalid RGB value: " + rgb0);
-        }
+			throw new MalformedFileLDRAWException("Invalid RGB value: " + rgb0);
+		}
 
 		return RGBA.rgba(
 				Integer.parseInt(rgb.substring(0, 2), 16),
@@ -437,29 +437,29 @@ public class LDRAWReader {
 		if (result == null) {
 			String type = m.group(1);
 			if (!type.equals("MATERIAL")) {
-                            throw new MalformedFileLDRAWException("Invalid stock material: " + type);
-            }
+				throw new MalformedFileLDRAWException("Invalid stock material: " + type);
+			}
 
 			String arguments = m.group(2);
 			if (arguments == null) {
-                            throw new MalformedFileLDRAWException("MATERIALS clause requires arguments: " + material);
-            }
+				throw new MalformedFileLDRAWException("MATERIALS clause requires arguments: " + material);
+			}
 
 			if ((m = StringUtil.match(arguments, GLITTER)) != null) {
 				Integer alpha;
 				if (m.group(2) != null) {
-                                    alpha = Integer.parseInt(m.group(2));
-                } else {
-                                    alpha = null;
-                }
+					alpha = Integer.parseInt(m.group(2));
+				} else {
+					alpha = null;
+				}
 				RGBA value = rgba(m.group(1), alpha);
 
 				Integer luminance;
 				if (m.group(3) != null) {
-                                    luminance = Integer.parseInt(m.group(6));
-                } else {
-                                    luminance = null;
-                }
+					luminance = Integer.parseInt(m.group(6));
+				} else {
+					luminance = null;
+				}
 
 				float fraction = Float.parseFloat(m.group(4));
 				float vfraction = Float.parseFloat(m.group(5));
@@ -470,18 +470,18 @@ public class LDRAWReader {
 			} else if ((m = StringUtil.match(arguments, SPECKLE)) != null) {
 				Integer alpha;
 				if (m.group(2) != null) {
-                                    alpha = Integer.parseInt(m.group(2));
-                } else {
-                                    alpha = null;
-                }
+					alpha = Integer.parseInt(m.group(2));
+				} else {
+					alpha = null;
+				}
 				RGBA value = rgba(m.group(1), alpha);
 
 				Integer luminance;
 				if (m.group(3) != null) {
-                                    luminance = Integer.parseInt(m.group(6));
-                } else {
-                                    luminance = null;
-                }
+					luminance = Integer.parseInt(m.group(6));
+				} else {
+					luminance = null;
+				}
 
 				float fraction = Float.parseFloat(m.group(4));
 
@@ -489,8 +489,8 @@ public class LDRAWReader {
 
 				result = new SpeckleMaterial(value, luminance, fraction, size);
 			} else {
-                            result = new CustomMaterial(arguments);
-            }
+				result = new CustomMaterial(arguments);
+			}
 		}
 
 		return result;
@@ -537,16 +537,16 @@ public class LDRAWReader {
 				public void author(RealName realName, UserName userName) throws LDRAWException {
 					String line = "0 Author: " + realName.getName();
 					if (userName != null) {
-                                            line = line + " [" + userName.getName() + "]";
-                    }
+						line = line + " [" + userName.getName() + "]";
+					}
 					println(line);
 				}
 
 				public void ldraworg(FileType partType, String qualifiers, FileVersion version) throws LDRAWException {
 					String line = "0 !LDRAW_ORG " + partType.toString() + " ";
 					if (qualifiers != null) {
-                                            line = line + qualifiers + " ";
-                    }
+						line = line + qualifiers + " ";
+					}
 					line = line + version;
 					println(line);
 				}
@@ -590,14 +590,14 @@ public class LDRAWReader {
 					String line = "0 !COLOUR " + name + " CODE " + code + " VALUE " + value.getRGBString() + " EDGE "
 							+ edge;
 					if (value.isAlphaDefined()) {
-                                            line = line + " ALPHA " + value.getAlpha();
-                    }
+						line = line + " ALPHA " + value.getAlpha();
+					}
 					if (luminance != null) {
-                                            line = line + " LUMINANCE " + luminance;
-                    }
+						line = line + " LUMINANCE " + luminance;
+					}
 					if (material != null) {
-                                            line = line + " " + material;
-                    }
+						line = line + " " + material;
+					}
 					println("0 !COLOUR " + line);
 				}
 
@@ -628,24 +628,24 @@ public class LDRAWReader {
 				public void line(ColourReference colour, Point3f[] line) throws LDRAWException {
 					String l = "2 " + colour;
 					for (Point3f p : line) {
-                                            l = l + " " + p;
-                    }
+						l = l + " " + p;
+					}
 					println(l);
 				}
 
 				public void triangle(ColourReference colour, Point3f[] triangle) throws LDRAWException {
 					String line = "3 " + colour;
 					for (Point3f p : triangle) {
-                                            line = line + " " + p;
-                    }
+						line = line + " " + p;
+					}
 					println(line);
 				}
 
 				public void quadrilateral(ColourReference colour, Point3f[] quad) throws LDRAWException {
 					String line = "4 " + colour;
 					for (Point3f p : quad) {
-                                            line = line + " " + p;
-                    }
+						line = line + " " + p;
+					}
 					println(line);
 				}
 
@@ -653,11 +653,11 @@ public class LDRAWReader {
 						throws LDRAWException {
 					String l = "5 " + colour;
 					for (Point3f p : line) {
-                                            l = l + " " + p;
-                    }
+						l = l + " " + p;
+					}
 					for (Point3f p : controlPoints) {
-                                            l = l + " " + p;
-                    }
+						l = l + " " + p;
+					}
 					println(l);
 				}
 
