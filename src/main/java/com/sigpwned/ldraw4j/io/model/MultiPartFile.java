@@ -49,7 +49,7 @@ public class MultiPartFile implements LDRAWLibrary {
                 reader.close();
                 return firstFile;
             } else if (!line.isBlank()) {
-                Matcher m = Pattern.compile("0\\s*(?:FILE|!DATA)\\s*([a-zA-Z0-9\\.]+).*").matcher(line);
+                Matcher m = Pattern.compile("0\\s*(?:FILE|!DATA)\\s*(.*)").matcher(line);
                 if (m.matches()) {
                     if (currentName != null) {
                         chunks.put(currentName, currentFile.toString());
@@ -57,7 +57,7 @@ public class MultiPartFile implements LDRAWLibrary {
                             firstFile = currentFile.toString();
                         }
                     }
-                    currentName = m.group(1);
+                    currentName = m.group(1).trim();
                     currentFile = new StringBuilder();
                 } else {
                     currentFile.append('\n').append(line);
