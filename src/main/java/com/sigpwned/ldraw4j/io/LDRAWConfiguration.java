@@ -61,12 +61,8 @@ public class LDRAWConfiguration {
 		new LDRAWReader(new AbstractLDRAWReadHandler() {
 			public void colour(String name, int code, RGBA value, ColourReference edgeref, Integer luminance,
 					Material material) throws LDRAWException {
-				// System.err.println("Loading colour " + name + " #" + code);
-
 				RGBA edge = edgeref.eval(colours, Colour.defaultColour()).getValue();
-
 				Colour colour = new Colour(name, code, material, luminance, value, edge);
-
 				colours.defineColour(colour);
 			}
 		}).read(in);
