@@ -19,7 +19,7 @@ import com.sigpwned.ldraw4j.model.colour.RGBA;
 public class Colour {
 	public static Colour defaultColour() {
 		return new Colour("DEFAULT", null, null, null,
-				RGBA.rgba(167, 166, 166, 255),
+				RGBA.rgba(255, 207, 0, 255),
 				RGBA.rgba(0, 0, 0, 255));
 	}
 
