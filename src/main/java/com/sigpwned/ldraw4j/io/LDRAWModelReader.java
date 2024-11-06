@@ -135,7 +135,7 @@ public class LDRAWModelReader {
 	private int depth = 0;
 
 	protected void parse(Reader in) throws IOException, LDRAWException {
-		handler.enterFile(top().getModelState().getName());
+		handler.enterFile(top().getModelState().getName(), top().getModelState());
 		try {
 			LDRAWReadHandler readHandler = new AbstractLDRAWReadHandler() {
 				public void bfc(BFC bfc) throws LDRAWException {

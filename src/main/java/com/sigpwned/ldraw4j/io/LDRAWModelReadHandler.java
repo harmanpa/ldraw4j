@@ -19,21 +19,26 @@ import com.sigpwned.ldraw4j.model.geometry.Point3f;
 import com.sigpwned.ldraw4j.x.LDRAWException;
 
 public interface LDRAWModelReadHandler {
-	public void clipping(ModelState state);
 
-	public void winding(ModelState state);
+    public void clipping(ModelState state);
 
-	public void line(ModelState modelState, Colour colour, Point3f[] line);
+    public void winding(ModelState state);
 
-	public void triangle(ModelState modelState, Colour colour, Point3f[] line);
+    public void line(ModelState modelState, Colour colour, Point3f[] line);
 
-	public void quadrilateral(ModelState modelState, Colour colour, Point3f[] line);
+    public void triangle(ModelState modelState, Colour colour, Point3f[] line);
 
-	public void optionalLine(ModelState modelState, Colour colour, Point3f[] line, Point3f[] controlPoints);
+    public void quadrilateral(ModelState modelState, Colour colour, Point3f[] line);
 
-	public void enterFile(String name);
+    public void optionalLine(ModelState modelState, Colour colour, Point3f[] line, Point3f[] controlPoints);
 
-	public void leaveFile(String name);
+    public void enterFile(String name);
+    
+    public default void enterFile(String name, ModelState modelState) {
+        enterFile(name);
+    }
 
-	public void meta(String line) throws LDRAWException;
+    public void leaveFile(String name);
+
+    public void meta(String line) throws LDRAWException;
 }
